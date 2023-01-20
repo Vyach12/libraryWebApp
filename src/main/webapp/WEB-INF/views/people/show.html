@@ -7,12 +7,16 @@
 <body>
 
 <div th:text="${person.getName()}">Name</div>
-<div th:text="${person.getBirthdate}">birthdate</div>
+<div th:text="${person.getDateOfBirth()}">birthdate</div>
 <hr/>
 
 <div th:if="${books.isEmpty()}">Человек пока не взял ни одной нкиги</div>
-<div th:if="${!books.isEmpty()}"> Книги на руках:
-    <div th:each="book: ${books}"><a th:href="@{/books/{id}(id=${book.getId()})}" th:text="${book.title} + ', ' + ${book.author}">Book</a></div>
+<div th:if="${!books.isEmpty()}">
+    <span>Книги на руках:</span>
+
+    <div th:each="book: ${books}">
+        <a th:href="@{/books/{id}(id=${book.getId()})}" th:text="${book.getTitle()} + ', ' + ${book.getAuthor()}">Book</a>
+    </div>
 </div>
 <hr/>
 

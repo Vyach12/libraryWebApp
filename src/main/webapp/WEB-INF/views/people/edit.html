@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${person.getId()} + ', ' + ${person.getName()}">Title</title>
+    <title th:text="${person.getId()} + ', ' + ${person.getName()}">Name person</title>
 </head>
 <body>
 <form th:method="POST" th:object="${person}" th:action="@{/people/{id}(id=${person.getId()})}">
@@ -10,11 +10,13 @@
     <input type="text" th:field="*{name}" id="name"/>
     <div style="color:#ce2929" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
     <br/>
+
     <label for="birthdate">Enter birthdate: </label>
-    <input type="text" th:field="*{birthdate}" id="birthdate"/>
-    <div style="color:#ce2929" th:if="${#fields.hasErrors('birthdate')}" th:errors="*{birthdate}">Birthdate Error</div>
+    <input type="text" th:field="*{dateOfBirth}" id="birthdate"/>
+    <div style="color:#ce2929" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}">Birthdate Error</div>
     <br/>
-    <input type="submit" value="update">
+
+    <input type="submit" value="Обновить">
 </form>
 
 </body>

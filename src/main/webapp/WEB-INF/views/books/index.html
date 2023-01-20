@@ -7,13 +7,18 @@
 <body>
 
 <div th:each="book:${books}">
-    <a th:href="@{/books/{id}(id=${book.getId()})}" th:text="${book.getTitle()} + ', ' + ${book.getAuthor}"></a>
+    <a th:href="@{/books/{id}(id=${book.getId()})}"
+       th:text="${book.getTitle()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYearDate()}"></a>
 </div>
 
 <br/>
 <hr/>
 
-<div><a href="/books/new">Добавить книгу</a></div>
+<div>
+    <form th:method="GET" th:action="@{books/new}">
+        <input type="submit" value="Добавить новую книгу">
+    </form>
+</div>
 
 </body>
 </html>

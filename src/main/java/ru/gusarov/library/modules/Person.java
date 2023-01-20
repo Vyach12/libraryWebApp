@@ -1,15 +1,33 @@
 package ru.gusarov.library.modules;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
+import org.hibernate.annotations.Cascade;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import java.util.Date;
+import java.util.List;
+
+@Entity
+@Table(name = "person")
 public class Person {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotEmpty(message = "Это поле не может быть пустым")
+    @Column(name="name")
     private String name;
-    @NotEmpty(message = "Это поле не может быть пустым")
-    @Pattern(regexp = "([0-9]{4})(-[0-9]{2}){2}", message = "Формат даты: YYYY-MM-DD")
-    private String birthdate;
+
+    @Column(name = "birthdate")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date dateOfBirth;
+
+    @OneToMany(mappedBy = "owner")
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    private List<Book> books;
+
 
     public void setId(int id) {
         this.id = id;
@@ -19,8 +37,8 @@ public class Person {
         this.name = name;
     }
 
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public int getId() {
@@ -30,8 +48,16 @@ public class Person {
     public String getName() {
         return name;
     }
-    public String getBirthdate() {
-        return birthdate;
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
     }
 
     public static Person create() {
