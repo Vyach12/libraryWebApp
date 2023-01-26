@@ -5,10 +5,10 @@
     <title>Редактирование</title>
 </head>
 <body>
+
 <div th:text="'Title: ' + ${book.getTitle()}">Title</div>
 <div th:text="'Author: ' + ${book.getAuthor()}">Author</div>
 <div th:text="'Year date: ' + ${book.yearDate}">Year date</div>
-
 <br>
 
 <div th:if="${owner}">

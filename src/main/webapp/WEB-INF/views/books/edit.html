@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${book.getTitle()} + ',' + ${book.getAuthor()}">Text</title>
+    <title>Редактирование книги</title>
 </head>
 <body>
 <form th:method="POST" th:action="@{/books/{id}(id=${book.getId()})}" th:object="${book}">
@@ -18,7 +18,7 @@
     <input type="text" th:field="*{yearDate}" id="year_date">
     <div style="color:#ce2929" th:if="${#fields.hasErrors('yearDate')}" th:errors="*{yearDate}">Year date Error</div>
     <br/>
-    <input type="submit" value="update">
+    <input type="submit" value="Обновить">
 </form>
 </body>
 </html>

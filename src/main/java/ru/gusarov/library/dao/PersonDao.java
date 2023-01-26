@@ -6,9 +6,4 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PersonDao {
-    private final JdbcTemplate jdbcTemplate;
-    @Autowired
-    public PersonDao(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 }

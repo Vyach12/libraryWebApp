@@ -49,14 +49,14 @@ public class PeopleController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id")int id, Model model) {
-        model.addAttribute("person", peopleService.findOne(id));
+        model.addAttribute("person", peopleService.findById(id));
         model.addAttribute("books", booksService.findBooksByOwnerId(id));
         return "people/show";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", peopleService.findOne(id));
+        model.addAttribute("person", peopleService.findById(id));
         return "people/edit";
     }
 

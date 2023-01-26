@@ -1,13 +1,14 @@
 package ru.gusarov.library.services;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.gusarov.library.modules.Book;
 import ru.gusarov.library.modules.Person;
 import ru.gusarov.library.repositories.PeopleRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,7 +24,7 @@ public class PeopleService {
         return peopleRepository.findAll();
     }
 
-    public Person findOne(int id) {
+    public Person findById(int id) {
         return peopleRepository.findById(id).orElse(null);
     }
 
@@ -42,4 +43,5 @@ public class PeopleService {
     public void delete(int id) {
         peopleRepository.deleteById(id);
     }
+
 }

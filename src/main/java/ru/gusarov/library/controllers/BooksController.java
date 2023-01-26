@@ -11,6 +11,7 @@ import ru.gusarov.library.services.BooksService;
 import ru.gusarov.library.services.PeopleService;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -26,18 +27,27 @@ public class BooksController {
     }
 
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("books", booksService.findAll());
+    public String index(Model model, @RequestParam(value = "page") Optional<Integer> page,
+                        @RequestParam(value = "books_per_page") Optional<Integer> booksPerPage,
+                        @RequestParam(value = "sort_by_year", required = false)boolean sortByYear) {
+
+        List<Book> books;
+        if (page.isPresent() && booksPerPage.isPresent()) {
+            books = booksService.findAllWithPagination(page.get(), booksPerPage.get(), sortByYear);
+        }  else {
+            books = booksService.findAll(sortByYear);
+        }
+        model.addAttribute("books", books);
+
         return "books/index";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model, @ModelAttribute("person") Person person) {
         model.addAttribute("book", booksService.findBookById(id));
-
-        Optional<Person> bookOwner = booksService.findOwnerByIdBook(id);
-        if (bookOwner.isPresent()) {
-            model.addAttribute("owner", bookOwner.get());
+        Optional<Person> owner = booksService.findOwnerByIdBook(id);
+        if (owner.isPresent()) {
+            model.addAttribute("owner", owner.get());
         } else {
             model.addAttribute("people", peopleService.findAll());
         }
@@ -51,7 +61,7 @@ public class BooksController {
     @PostMapping()
     public String create(@ModelAttribute("book")@Valid Book book, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
-            return "/books/edit";
+            return "/books/new";
         }
         booksService.save(book);
         return "redirect:/books";
@@ -69,18 +79,18 @@ public class BooksController {
         if (bindingResult.hasErrors())
             return "people/edit";
         booksService.update(id, book);
-        return "redirect:/books";
+        return "redirect:/books/" + id;
     }
 
     @PostMapping("/{id}/assign")
     public String assign(@PathVariable("id")int id, @ModelAttribute("person")Person person) {
-        booksService.changeOwner(booksService.findBookById(id), person);
+        booksService.assign(id, person);
         return "redirect:/books";
     }
 
     @PostMapping("/{id}/release")
     public String release(@PathVariable("id")int id) {
-        booksService.changeOwner(booksService.findBookById(id), null);
+        booksService.release(id);
         return "redirect:/books";
     }
 
@@ -88,5 +98,16 @@ public class BooksController {
     public String delete(@PathVariable("id")int id) {
         booksService.delete(id);
         return "redirect:/books";
+    }
+
+    @GetMapping("/search")
+    public String search() {
+        return "books/search";
+    }
+
+    @PostMapping("/search")
+    public String search(Model model, @RequestParam(value = "query", required = false)String query) {
+        model.addAttribute("books", booksService.searchBooksByQuery(query));
+        return "/books/search";
     }
 }
